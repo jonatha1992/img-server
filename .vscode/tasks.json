@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    { "label": "instalar", "type": "shell", "command": "npm install", "problemMatcher": [] },
+    { "label": "test", "type": "shell", "command": "npm test", "group": { "kind": "test", "isDefault": true }, "problemMatcher": [] },
+    { "label": "typecheck", "type": "shell", "command": "npm run typecheck", "problemMatcher": "$tsc" },
+    {
+      "label": "levantar",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "options": { "env": { "API_KEY_SHOWROOMISABELLA": "dev-key", "DATA_DIR": "./data" } },
+      "problemMatcher": []
+    }
+  ]
+}

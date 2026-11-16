@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "img-server (F5)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "program": "${workspaceFolder}/src/server.ts",
+      "env": {
+        "API_KEY_SHOWROOMISABELLA": "dev-key",
+        "DATA_DIR": "${workspaceFolder}/data",
+        "PUBLIC_URL": "http://localhost:3000"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
