@@ -10,6 +10,8 @@ Un proyecto = una API key (`API_KEY_<PROYECTO>` en el `.env`). El proyecto de la
 
 | Método | Ruta | Auth | Notas |
 |---|---|---|---|
+| GET | `/admin` o `/dashboard` | pública (auth interna) | Panel de administración web interactivo |
+| GET | `/v1/admin/stats` | admin key | Métricas globales (archivos, bytes, caché, proyectos) |
 | POST | `/v1/<proyecto>/upload` | key | multipart: `file` (jpeg/png/webp/gif, máx 10 MB), `folder` opcional (ej. `productos`, hasta 4 niveles). Responde 201 `{secure_url, public_id, width, height, bytes, format}` |
 | GET | `/<proyecto>/image/upload/[transformaciones/]<public_id>.<ext>` | pública | entrega con transformaciones |
 | DELETE | `/v1/<proyecto>/<public_id>` | key | `{result:"ok"}` o 404 `{result:"not found"}` (borra también las variantes) |
@@ -23,6 +25,15 @@ Ejemplo: `https://img.tecnofusion.dev/showroomisabella/image/upload/f_auto,q_aut
 CORS: `*.tecnofusion.dev` (https), `localhost` y `127.0.0.1` (cualquier puerto), más `CORS_ORIGINS`.
 
 Límites conocidos: los GIF animados se sirven como primer cuadro cuando se transforman; el original sin transformar conserva la animación.
+
+## Panel Web (/admin)
+
+El servidor cuenta con una consola interactiva en `/admin` (o `/dashboard`):
+- **Métricas**: espacio en disco de originales, caché y conteo total de archivos.
+- **Galería interactiva**: listado de recursos por proyecto con miniaturas optimizadas.
+- **Subida drag & drop**: carga directa de imágenes con selector de folder opcional.
+- **Probador de transformaciones**: visor en tiempo real para previsualizar presets (`w_300`, `c_fill`, `f_auto`, etc.) o transformaciones libres con botón de copiado de URL y eliminación.
+- **Autenticación**: se accede mediante `ADMIN_KEY` (visión global) o API Key del proyecto.
 
 ## Desarrollo
 
