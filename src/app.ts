@@ -43,6 +43,7 @@ export function buildApp(config: Config) {
   };
   app.get("/admin", serveDashboard);
   app.get("/dashboard", serveDashboard);
+  app.get("/", async (_req, reply) => reply.redirect("/admin"));
 
   const handleStats = async (req: any, reply: any) => {
     const sent = req.headers["x-api-key"];
