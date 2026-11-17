@@ -7,6 +7,7 @@ import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import type { Config } from "./config.ts";
+import { DASHBOARD_HTML } from "./dashboard.ts";
 import { type Ext, isValidId, Storage } from "./storage.ts";
 import {
   chooseFormat, CONTENT_TYPES, isTransformSegment, parseTransforms, render, type OutFmt,
@@ -36,6 +37,27 @@ export function buildApp(config: Config) {
   app.register(multipart, { limits: { fileSize: config.maxBytes, files: 1 } });
 
   app.get("/health", async () => ({ status: "ok" }));
+
+  const serveDashboard = async (_req: any, reply: any) => {
+    return reply.type("text/html; charset=utf-8").send(DASHBOARD_HTML);
+  };
+  app.get("/admin", serveDashboard);
+  app.get("/dashboard", serveDashboard);
+
+  const handleStats = async (req: any, reply: any) => {
+    const sent = req.headers["x-api-key"];
+    if (
+      !config.adminKey ||
+      typeof sent !== "string" ||
+      !timingSafeEqual(digest(config.adminKey), digest(sent))
+    ) {
+      return reply.code(401).send({ error: "Admin key inválida" });
+    }
+    const stats = await storage.stats([...config.keys.keys()]);
+    return { ...stats, projects: [...config.keys.keys()] };
+  };
+  app.get("/admin/api/stats", handleStats);
+  app.get("/v1/admin/stats", handleStats);
 
   app.register(async (api) => {
     api.addHook("onRequest", async (req, reply) => {

@@ -10,9 +10,9 @@ Servicio de imágenes (upload, entrega con transformaciones, borrado, listado) c
 - Transformaciones al estilo Cloudinary acotadas a w/h/c/q/f; lo desconocido da 400.
 
 ## Archivos clave
-- `src/app.ts` rutas, auth, CORS · `src/transforms.ts` parseo y render · `src/storage.ts` disco · `src/config.ts` env
+- `src/app.ts` rutas, auth, CORS · `src/transforms.ts` parseo y render · `src/storage.ts` disco · `src/config.ts` env · `src/dashboard.ts` consola web visual
 - `deploy/docker-compose.yml` (Traefik labels, puerto 127.0.0.1:3940, volumen `img_data`)
-- `test/api.test.ts`
+- `test/api.test.ts` · `test/dashboard.test.ts`
 
 ## Despliegue
 - Registrado en `home-server/deployer/apps.json` como `img-server` (main.deploy=true, health http://127.0.0.1:3940/health).
@@ -20,4 +20,5 @@ Servicio de imágenes (upload, entrega con transformaciones, borrado, listado) c
 - DNS pendiente/estado: ver notas del último cambio.
 
 ## Cambios recientes
+- Dashboard web interactivo (/admin y /dashboard) con autenticación por AdminKey / API Key, métricas globales de almacenamiento y caché, galería con miniaturas por proyecto, probador de transformaciones presets/custom con copia de URL al portapapeles, subida drag & drop y borrado de imágenes.
 - Versión inicial.

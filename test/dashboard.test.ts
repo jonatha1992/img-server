@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { buildApp } from "../src/app.js";
+import { buildApp } from "../src/app.ts";
 
 describe("dashboard y stats", () => {
   let app: ReturnType<typeof buildApp>;
@@ -54,5 +54,22 @@ describe("dashboard y stats", () => {
     const json = res.json();
     assert.equal(typeof json.totalFiles, "number");
     assert.equal(typeof json.totalBytes, "number");
+  });
+
+  it("sirve dashboard en /dashboard y stats en /v1/admin/stats", async () => {
+    const dashRes = await app.inject({
+      method: "GET",
+      url: "/dashboard",
+    });
+    assert.equal(dashRes.statusCode, 200);
+    assert.match(dashRes.body, /img-server &bull; Console/);
+
+    const statsRes = await app.inject({
+      method: "GET",
+      url: "/v1/admin/stats",
+      headers: { "x-api-key": "admin-secret-key" },
+    });
+    assert.equal(statsRes.statusCode, 200);
+    assert.equal(typeof statsRes.json().totalFiles, "number");
   });
 });
